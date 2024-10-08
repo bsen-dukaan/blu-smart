@@ -4,7 +4,6 @@ const app = new Hono();
 
 const baseUrl = "https://chatbot.tracking.dev.blucgn.com";
 
-// Helper function to handle API responses
 async function handleApiResponse(response: Response) {
   if (!response.ok) {
     const errorText = await response.text();
@@ -14,7 +13,7 @@ async function handleApiResponse(response: Response) {
   return await response.json();
 }
 
-// 1. Login API
+// Login API
 app.post("/login", async (c) => {
   const { username, password } = await c.req.json();
 
@@ -40,7 +39,7 @@ app.post("/login", async (c) => {
   }
 });
 
-// 2. Get Rides Information API
+// Get Rides Information API
 app.get("/getRides", async (c) => {
   const startRecord = c.req.query("startRecord");
   const count = c.req.query("count");
@@ -76,7 +75,7 @@ app.get("/getRides", async (c) => {
   }
 });
 
-// 3. Get RideAction Information API
+// Get RideAction Information API
 app.get("/rideAction", async (c) => {
   const rideId = c.req.query("rideId");
   const driverId = c.req.query("driverId");
