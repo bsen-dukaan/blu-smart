@@ -45,7 +45,7 @@ app.get("/getRides", async (c) => {
   const count = c.req.query("count");
   const riderId = c.req.query("riderId");
   const rideType = c.req.query("rideType");
-  const token = c.req.query("Authorization");
+  const token = c.req.query("token");
 
   if (!startRecord || !riderId || !rideType || !token) {
     return c.json({ error: "Missing required parameters" }, 400);
@@ -83,7 +83,7 @@ app.get("/rideAction", async (c) => {
   const rideRequestId = c.req.query("rideRequestId");
   const templateId = c.req.query("templateId");
   const templateKey = c.req.query("templateKey");
-  const token = c.req.query("Authorization");
+  const token = c.req.query("token");
 
   if (!rideActionStr || !rideRequestId || !templateKey || !token) {
     return c.json({ error: "Missing required parameters or headers" }, 400);
