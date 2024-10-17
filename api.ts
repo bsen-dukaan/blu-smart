@@ -115,4 +115,64 @@ app.get("/rideAction", async (c) => {
   }
 });
 
+// Perform RideAction API
+app.post("/performRideAction", async (c) => {
+  const {
+    rideRequestId,
+    rideAction,
+    templateId,
+    templateKey,
+    driverId,
+    latitude,
+    longitude,
+    cancellationReason,
+    newScheduledTime,
+    ssoId,
+  } = await c.req.json();
+
+  const token = c.req.header("Authorization");
+
+  if (!rideRequestId || !rideAction || !templateKey || !token) {
+    return c.json({ error: "Missing required parameters" }, 400);
+  }
+
+  try {
+    const url = new URL(`${baseUrl}/api/v1/external/chat/perform/RideAction`);
+
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      Authorization: token,
+    };
+
+    const body: Record<string, string> = {
+      rideRequestId,
+      rideAction,
+      templateKey,
+    };
+
+    if (templateId) body.templateId = templateId;
+    if (driverId) body.driverId = driverId;
+    if (latitude) body.latitude = latitude;
+    if (longitude) body.longitude = longitude;
+    if (cancellationReason) body.cancellationReason = cancellationReason;
+    if (newScheduledTime) body.newScheduledTime = newScheduledTime;
+    if (ssoId) body.ssoId = ssoId;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body),
+    });
+
+    const data = await handleApiResponse(response);
+    return c.json(data);
+  } catch (error) {
+    console.error("Perform ride action request failed:", error);
+    return c.json(
+      { error: "Failed to perform ride action", details: error.message },
+      500
+    );
+  }
+});
+
 export default app;
